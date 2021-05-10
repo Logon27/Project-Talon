@@ -1,11 +1,11 @@
 #  Project Talon
 
-This is a javafx program I created in about a day in order to automate tasks using native input. This project utilizes the java robot class to accomplish that. The application moves the mouse in human like curves and has varying delays for mouse/keyboard inputs.
+This is a javafx program I created in about a day in order to automate tasks using native input. This project utilizes the java robot class to accomplish that. The application moves the mouse in human like curves and has varying delays for mouse/keyboard inputs. This application is really just for my personal use and is coded poorly, but it serves its purpose.
 
 ---
 The image below is the main application window. First you press add region. A screenshot is taken of your current display. You then select a square region in which you want to add to the task queue where the mouse will move to (see second image). You can then select the second delay between tasks, whether or not the mouse clicks, etc. Once you are done you press start and the program will begin executing the queue. The top box shows all selected regions with their x and y coordinates on the screen. There is also a progress bar which shows the current progress of the tasks on the list. This project was never intended to have very clean or efficient/commented code. This was more of a one day project to automate some mundane tasks I wanted to do.
 
-With the update to version 2 you can now sequence in text input. The window is now resizable. This application is really just for my personal use and is coded poorly, but it serves its purpose. The integer spinner is for the delay in seconds between each task on the list.
+With the update to version 2 you can now sequence in text input. The window is now resizable. The integer spinner is for the delay in seconds between each task on the list.
 
 ---
 Warning:

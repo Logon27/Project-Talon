@@ -17,7 +17,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Project Talon");
         primaryStage.setScene(new Scene(root, 500, 500));
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 

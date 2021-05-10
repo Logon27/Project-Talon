@@ -1,9 +1,13 @@
 package talon;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.HBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +73,7 @@ public class Controller {
         rectangles.clear();
     }
 
-    public void startButtonClicked() {
+/*    public void startButtonClicked() {
         System.out.println("Start Button Clicked");
         progBar.setProgress(0);
         botThread = new Thread(() -> {
@@ -115,6 +119,93 @@ public class Controller {
             }
         });
         botThread.start();
+    }*/
+
+    public void startButtonClicked() {
+        System.out.println("Start Button Clicked");
+        progBar.setProgress(0);
+        botThread = new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if(rectList.getItems() != null && !rectList.getItems().isEmpty()) {
+                    running = true;
+
+                    Robot robot = null;
+
+                    try {
+                        robot = new Robot();
+                    } catch (AWTException e) {
+                        e.printStackTrace();
+                    }
+                    robot.delay(3000);
+                    do{
+                        int rectangleCounter = 0;
+                        for (int i = 0; i < rectList.getItems().size(); i++) {
+                            if (running) {
+                                if(rectList.getItems().get(i).charAt(0) == '[') {
+                                    int selectedX = Utilities.getRandomNumberInRange((int) rectangles.get(i).getMinX(), (int) rectangles.get(i).getMaxX());
+                                    int selectedY = Utilities.getRandomNumberInRange((int) rectangles.get(i).getMinY(), (int) rectangles.get(i).getMaxY());
+                                    Utilities.humanMoveTowards(robot, selectedX, selectedY);
+                                    if(clickCheckBox.isSelected()) {
+                                        Utilities.leftClickWithDelay(robot);
+                                    }
+                                    Utilities.moveMouseToRandomPositionWithDelay(robot);
+                                } else {
+                                    if(rectList.getItems().get(i).contains("/Enter/")) {
+                                        Utilities.typeString(robot, rectList.getItems().get(i).substring(0, rectList.getItems().get(i).length()-8), true);
+                                    } else {
+                                        Utilities.typeString(robot, rectList.getItems().get(i).substring(0, rectList.getItems().get(i).length()-8), false);
+                                    }
+                                }
+
+                                double progress = (double) (i + 1) / (double) rectList.getItems().size();
+                                progBar.setProgress(progress);
+                                if (!(i == rectList.getItems().size() - 1) || repeatCheckBox.isSelected()) {
+                                    robot.delay(Utilities.getRandomNumberInRange((1000 * secondDelay.getValue()) - 7, (1000 * secondDelay.getValue()) + 7));
+                                }
+
+                            } else {
+                                return;
+                            }
+                        }
+                    } while(repeatCheckBox.isSelected());
+                    System.out.println("Finished Running");
+                    progBar.setProgress(0);
+                    return;
+                } else {
+                    System.out.println("No rectangles set.");
+                    return;
+                }
+            }
+        });
+        botThread.start();
+    }
+
+    public void addTextButtonClicked() {
+        TextInputDialog td = new TextInputDialog();
+        td.setTitle("Enter Your Text (Cannot Include Square Brackets)");
+        td.setHeaderText(null);
+        HBox hBox = new HBox();
+        CheckBox checkBox = new CheckBox("Press Enter After Text");
+        TextField textField = new TextField();
+        hBox.getChildren().addAll(textField, checkBox);
+        hBox.setSpacing(10);
+        hBox.setAlignment(Pos.CENTER);
+        td.getDialogPane().setContent(hBox);
+        td.showAndWait();
+
+        if(textField.getText().equals("") && checkBox.isSelected() == false) {
+            return;
+        }
+
+        if(rectList.getItems().get(0) == null) {
+            rectList.getItems().clear();
+        }
+
+        if(checkBox.isSelected() == true) {
+            rectList.getItems().add(textField.getText() + " /Enter/");
+        } else {
+            rectList.getItems().add(textField.getText());
+        }
     }
 
     public void stopButtonClicked() {
